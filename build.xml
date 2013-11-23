@@ -99,8 +99,32 @@
   
   <!-- Project Libraries -->
   
+  <path id="library.maven:_com.sun.jdmk:jmxtools:1.2.1.classpath">
+    <pathelement location="${path.variable.maven_repository}/com/sun/jdmk/jmxtools/1.2.1/jmxtools-1.2.1.jar"/>
+  </path>
+  
+  <path id="library.maven:_com.sun.jmx:jmxri:1.2.1.classpath">
+    <pathelement location="${path.variable.maven_repository}/com/sun/jmx/jmxri/1.2.1/jmxri-1.2.1.jar"/>
+  </path>
+  
+  <path id="library.maven:_javax.activation:activation:1.1.classpath">
+    <pathelement location="${path.variable.maven_repository}/javax/activation/activation/1.1/activation-1.1.jar"/>
+  </path>
+  
+  <path id="library.maven:_javax.jms:jms:1.1.classpath">
+    <pathelement location="${path.variable.maven_repository}/javax/jms/jms/1.1/jms-1.1.jar"/>
+  </path>
+  
+  <path id="library.maven:_javax.mail:mail:1.4.classpath">
+    <pathelement location="${path.variable.maven_repository}/javax/mail/mail/1.4/mail-1.4.jar"/>
+  </path>
+  
   <path id="library.maven:_junit:junit:4.10.classpath">
     <pathelement location="${path.variable.maven_repository}/junit/junit/4.10/junit-4.10.jar"/>
+  </path>
+  
+  <path id="library.maven:_log4j:log4j:1.2.15.classpath">
+    <pathelement location="${path.variable.maven_repository}/log4j/log4j/1.2.15/log4j-1.2.15.jar"/>
   </path>
   
   <path id="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath">
@@ -138,30 +162,52 @@
   
   <path id="sassyreader.module.production.classpath">
     <path refid="${module.jdk.classpath.sassyreader}"/>
-    <path refid="library.maven:_org.slf4j:slf4j-api:1.6.6.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.15.classpath"/>
+    <path refid="library.maven:_javax.mail:mail:1.4.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+    <path refid="library.maven:_javax.jms:jms:1.1.classpath"/>
+    <path refid="library.maven:_com.sun.jdmk:jmxtools:1.2.1.classpath"/>
+    <path refid="library.maven:_com.sun.jmx:jmxri:1.2.1.classpath"/>
   </path>
   
   <path id="sassyreader.runtime.production.module.classpath">
     <pathelement location="${sassyreader.output.dir}"/>
-    <path refid="library.maven:_org.slf4j:slf4j-api:1.6.6.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.15.classpath"/>
+    <path refid="library.maven:_javax.mail:mail:1.4.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+    <path refid="library.maven:_javax.jms:jms:1.1.classpath"/>
+    <path refid="library.maven:_com.sun.jdmk:jmxtools:1.2.1.classpath"/>
+    <path refid="library.maven:_com.sun.jmx:jmxri:1.2.1.classpath"/>
   </path>
   
   <path id="sassyreader.module.classpath">
     <path refid="${module.jdk.classpath.sassyreader}"/>
     <pathelement location="${sassyreader.output.dir}"/>
-    <path refid="library.maven:_org.slf4j:slf4j-api:1.6.6.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.15.classpath"/>
+    <path refid="library.maven:_javax.mail:mail:1.4.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+    <path refid="library.maven:_javax.jms:jms:1.1.classpath"/>
+    <path refid="library.maven:_com.sun.jdmk:jmxtools:1.2.1.classpath"/>
+    <path refid="library.maven:_com.sun.jmx:jmxri:1.2.1.classpath"/>
     <path refid="library.maven:_junit:junit:4.10.classpath"/>
     <path refid="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath"/>
     <path refid="library.maven:_org.slf4j:slf4j-simple:1.6.6.classpath"/>
+    <path refid="library.maven:_org.slf4j:slf4j-api:1.6.6.classpath"/>
   </path>
   
   <path id="sassyreader.runtime.module.classpath">
     <pathelement location="${sassyreader.testoutput.dir}"/>
     <pathelement location="${sassyreader.output.dir}"/>
-    <path refid="library.maven:_org.slf4j:slf4j-api:1.6.6.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.15.classpath"/>
+    <path refid="library.maven:_javax.mail:mail:1.4.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+    <path refid="library.maven:_javax.jms:jms:1.1.classpath"/>
+    <path refid="library.maven:_com.sun.jdmk:jmxtools:1.2.1.classpath"/>
+    <path refid="library.maven:_com.sun.jmx:jmxri:1.2.1.classpath"/>
     <path refid="library.maven:_junit:junit:4.10.classpath"/>
     <path refid="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath"/>
     <path refid="library.maven:_org.slf4j:slf4j-simple:1.6.6.classpath"/>
+    <path refid="library.maven:_org.slf4j:slf4j-api:1.6.6.classpath"/>
   </path>
   
   
@@ -246,16 +292,14 @@
   <target name="clean" depends="clean.module.sassyreader" description="cleanup all"/>
   
   <target name="build.modules" depends="init, clean, compile.module.sassyreader" description="build all modules"/>
-  
 
-  <target name="jar" depends="build.modules">
-      <jar destfile="sassyreader.jar" basedir="${sassyreader.output.dir}">
+    <target name="jar" depends="build.modules">
+        <jar destfile="sassyreader.jar" basedir="${sassyreader.output.dir}">
 
 
-      </jar>
+        </jar>
 
-  </target>
+    </target>
 
     <target name="all" depends="jar" description="build all"/>
-
 </project>

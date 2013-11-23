@@ -21,12 +21,11 @@ package org.eobjects.sassy;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * A reader object that reads .sas7bdat files.
@@ -35,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SasReader {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger logger = Logger
 			.getLogger(SasReader.class);
 
 	// Subheader 'signatures'
@@ -107,11 +106,11 @@ public class SasReader {
 		try {
 
 			SasHeader header = readHeader(is);
-			logger.info("({}) Header: {}", _file, header);
+			logger.info(MessageFormat.format("({0}) Header: {1}", _file, header));
 
 			readPages(header, callback);
 
-			logger.info("({}) Done!", _file);
+			logger.info(MessageFormat.format("({0}) Done!", _file));
 		} catch (Exception e) {
 			if (e instanceof SasReaderException) {
 				throw (SasReaderException) e;
@@ -151,7 +150,7 @@ public class SasReader {
 		int col_count = -1;
 
 		for (int pageNumber = 0; pageNumber < pageCount; pageNumber++) {
-			logger.info("({}) Reading page no. {}", _file, pageNumber);
+			logger.info(MessageFormat.format("({0}) Reading page no. {1}", _file, pageNumber));
 			final byte[] pageData = new byte[pageSize];
 			int read = is.read(pageData);
 			if (read == -1) {
@@ -166,12 +165,12 @@ public class SasReader {
 			case 1:
 			case 2:
 				// accepted type
-				logger.info("({}) page type supported: {}", _file, pageType);
+				logger.info(MessageFormat.format("({0}) page type supported: {1}", _file, pageType));
 				break;
 			case 4:
 				// accepted but not supported
-				logger.info("({}) page type not fully supported: {}", _file,
-						pageType);
+				logger.info(MessageFormat.format("({0}) page type not fully supported: {1}", _file,
+						pageType));
 				break;
 			default:
 				throw new SasReaderException("Page " + pageNumber
@@ -215,9 +214,9 @@ public class SasReader {
 					col_count = col_count_6;
 
 					if (col_count_7 != col_count_6) {
-						logger.warn(
-								"({}) Column count mismatch: {} vs. {}",
-								new Object[] { _file, col_count_6, col_count_7 });
+						logger.warn(MessageFormat.format(
+								"({0}) Column count mismatch: {1} vs. {2}",
+								new Object[] { _file, col_count_6, col_count_7 }));
 					}
 
 					SasSubHeader colText = getSubHeader(subHeaders,
@@ -296,10 +295,10 @@ public class SasReader {
 						columnTypes.add(columnType);
 
 						if (logger.isDebugEnabled()) {
-							logger.debug(
-									"({}) column no. {} read: name={},label={},type={},length={}",
+							logger.debug(MessageFormat.format(
+									"({0}) column no. {1} read: name={2},label={3},type={4},length={5}",
 									new Object[] { _file, i, columnName, label,
-											columnType, length });
+											columnType, length }));
 						}
 						callback.column(i, columnName, label, columnType,
 								length);
@@ -309,7 +308,7 @@ public class SasReader {
 				}
 
 				if (!callback.readData()) {
-					logger.info("({}) Callback decided to not read data", _file);
+					logger.info(MessageFormat.format("({0}) Callback decided to not read data", _file));
 					return;
 				}
 
@@ -364,15 +363,15 @@ public class SasReader {
 					}
 
 					if (logger.isDebugEnabled()) {
-						logger.debug("({}) row no. {} read: {}", new Object[] {
-								_file, row, rowData });
+						logger.debug(MessageFormat.format("({0}) row no. {1} read: {2}", new Object[] {
+								_file, row, rowData }));
 					}
 
 					rowCount++;
 					boolean next = callback.row(rowCount, rowData);
 					if (!next) {
-						logger.info("({}) Callback decided to stop iteration",
-								_file);
+						logger.info(MessageFormat.format("({0}) Callback decided to stop iteration",
+								_file));
 						return;
 					}
 
@@ -385,8 +384,8 @@ public class SasReader {
 	private SasSubHeader spliceColAttrSubHeaders(
 			List<SasSubHeader> colAttrHeaders) {
 		final int colAttrHeadersSize = colAttrHeaders.size();
-		logger.info("({}) Splicing {} column attribute headers", _file,
-				colAttrHeadersSize);
+		logger.info(MessageFormat.format("({0}) Splicing {1} column attribute headers", _file,
+				colAttrHeadersSize));
 
 		byte[] result = IO.readBytes(colAttrHeaders.get(0).getRawData(), 0,
 				colAttrHeaders.get(0).getRawData().length - 8);
@@ -447,8 +446,8 @@ public class SasReader {
 					+ pageCount);
 		}
 
-		logger.info("({}) page size={}, page count={}", new Object[] { _file,
-				pageSize, pageCount });
+		logger.info(MessageFormat.format("({0}) page size={1}, page count={2}", new Object[] { _file,
+				pageSize, pageCount }));
 
 		final String sasRelease = IO.readString(header, 216, 8);
 		final String sasHost = IO.readString(header, 224, 8);
